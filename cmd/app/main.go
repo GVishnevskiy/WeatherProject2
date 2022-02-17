@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/GVishnevskiy/WeatherProject2/internal/server"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -10,5 +11,5 @@ func main() {
 
 	router := gin.Default()
 
-	StartServer(router)
+	server.StartServer(router)
 }
