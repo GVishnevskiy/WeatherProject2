@@ -19,12 +19,13 @@
 
     <div class="main">
         <button onclick="loadCity()">
-            Узнать свое местоположение</button>
+            Определить город</button>
+        <button onclick="loadWeatherInfo()">
+            Определить погоду</button>
         <p>
         <input id="cityInput" type="text" size="20">
+        <p><p>
 
-        <button onclick="loadWeatherInfo()">
-            Узнать погоду</button>
         {{block "update" .}}
             <div id="weatherInfo">
                 <p>Температура:       {{ .Temp }} °C</p>

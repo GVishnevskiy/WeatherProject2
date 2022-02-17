@@ -23,10 +23,12 @@ func StartServer(router *gin.Engine) {
 
 	url, _ := os.LookupEnv("SITE_URL")
 	logger.LogData(url)
+	logger.LogData("url")
 	port, _ := os.LookupEnv("SITE_PORT")
 	redisClient = SetupRedis(url, port)
 	err := router.Run(port)
 	if logger.LogErr(err) {
+		logger.LogData("1")
 		return
 	}
 }
@@ -59,15 +61,20 @@ func handleWeatherRequest(c *gin.Context) {
 
 	weatherJson, err := redisClient.Get(city).Bytes()
 	if logger.LogErr(err) {
+		logger.LogData("2")
+		logger.LogData(city)
 		weather, err = api.GetWeather(city)
 		json, err := json.Marshal(weather)
 		redisClient.Set(city, json, time.Minute)
 		if logger.LogErr(err) {
+			logger.LogData("3")
 			return
 		}
 	} else {
+		logger.LogData("from Redis")
 		err = json.Unmarshal(weatherJson, &weather)
 		if logger.LogErr(err) {
+			logger.LogData("3")
 			return
 		}
 	}
