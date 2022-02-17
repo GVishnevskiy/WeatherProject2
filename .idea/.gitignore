@@ -8,3 +8,4 @@
 /httpRequests/
 # Ignore .env
 ../ssl
+../.env
