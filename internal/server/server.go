@@ -1,9 +1,6 @@
-package server
+package main
 
 import (
-	"../api"
-	"../entities"
-	"../logger"
 	"context"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
@@ -24,7 +21,7 @@ func StartServer(router *gin.Engine) {
 	port, _ := os.LookupEnv("SITE_PORT")
 	redisClient = SetupRedis(url, port)
 	err := router.Run(port)
-	if logger.LogErr(err) {
+	if LogErr(err) {
 		return
 	}
 }
@@ -51,19 +48,19 @@ func startPage(c *gin.Context) {
 func handleWeatherRequest(c *gin.Context) {
 	city := c.Query("city")
 
-	var weather entities.Weather
+	var weather Weather
 
 	weatherJson, err := redisClient.Get(ctx, city).Bytes()
-	if logger.LogErr(err) {
-		weather, err = api.GetWeather(city)
+	if LogErr(err) {
+		weather, err = GetWeather(city)
 		json, err := json.Marshal(weather)
 		redisClient.Set(ctx, city, json, time.Minute)
-		if logger.LogErr(err) {
+		if LogErr(err) {
 			return
 		}
 	} else {
 		err = json.Unmarshal(weatherJson, &weather)
-		if logger.LogErr(err) {
+		if LogErr(err) {
 			return
 		}
 	}

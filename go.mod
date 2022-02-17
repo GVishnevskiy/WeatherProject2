@@ -1,4 +1,4 @@
-module github.com/my/repo
+module github.com/GVishnevskiy/WeatherProject2
 
 go 1.17
 

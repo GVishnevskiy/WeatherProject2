@@ -1,4 +1,4 @@
-package entities
+package main
 
 type Weather struct {
 	Coord struct {
