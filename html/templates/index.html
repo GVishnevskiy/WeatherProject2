@@ -1,0 +1,72 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>Погода</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="html/css/styles.css?v=1.1">
+    <!-- <script src="static/js/script.js?v=1.1"></script> -->
+</head>
+
+<body>
+<div id="app">
+    <div class="header">
+    </div>
+
+    <div class="main">
+        <button onclick="loadCity()">
+            Узнать свое местоположение</button>
+        <p>
+        <input id="cityInput" type="text" size="20">
+
+        <button onclick="loadWeatherInfo()">
+            Узнать погоду</button>
+        {{block "update" .}}
+            <div id="weatherInfo">
+                <p>Температура:       {{ .Temp }} °C</p>
+                <p>Ощущается:         {{ .Feels }} °C</p>
+                <p>Влажность воздуха: {{ .Humidity }}%</p>
+                <p>Скорость ветра:    {{ .WindSpeed }} м/с</p>
+            </div>
+        {{end}}
+
+
+    </div>
+    <script>
+        function loadCity() {
+            const cityInput = document.getElementById("cityInput");
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const resp = xhr.responseText;
+                    const ipObj = JSON.parse(resp)
+                    cityInput.value = ipObj.city
+                }
+            }
+            xhr.open("GET", "http://ip-api.com/json/", true);
+            try { xhr.send(); } catch (err) { /* handle error */ }
+        }
+
+        function loadWeatherInfo() {
+            const weatherDiv = document.getElementById("weatherInfo");
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    weatherDiv.outerHTML = xhr.responseText;
+                }
+            }
+            const city = document.getElementById("cityInput").value;
+            xhr.open("GET", "/weather?city=" + city, true);
+            try { xhr.send(); } catch (err) { /* handle error */ }
+        }
+    </script>
+
+    <div class="footer">
+    </div>
+</div>
+</body>
+</html>
